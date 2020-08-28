@@ -3,8 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type='text/css' href="styles/index.css">
-    <script type='text/javascript' src="index.js"></script>
+    
+    <style>
+        body
+{
+  background-color: rgb(4, 2, 15);
+}
+
+
+
+/* header */
+
+
+.header
+{
+  height: 20px;
+  width: 40%;
+  border: 1px solid white;
+  padding: 5px;
+  margin-left: 360px;
+
+}
+
+h3{
+  margin-top: -2px;
+  color: white;
+  text-align: center;
+}
+ 
+
+@media screen and (max-width: 500px) {
+  .header  {
+  margin-left: 10px;
+  width: 70%;
+  font-size:10px;
+  }
+} 
+
+
+/* Serach Bar */
+
+
+#search
+{
+ 
+  width: 90%;
+  height: 5vh;
+  border-top: 0; 
+  border-left: 0;
+  border-right: 0;
+  margin-top: 30px;
+  margin-left: 60px;
+  background-color: rgb(4, 2, 15);
+  color:white;
+}
+
+@media screen and (max-width: 500px) {
+  #search  {
+margin: 10px 5px;
+  }
+}
+
+/* Main Part */
+
+#news-article
+{
+ 
+  background-color:  rgb(16, 16, 44);
+  padding: 6rem;
+  margin-bottom: 2rem;
+  margin-left: 20px;
+  width: 8%;
+ display: inline-block;
+  height: 400px;
+  border-radius:40px;
+  
+}
+
+@media screen and (max-width: 500px) {
+  #news-articles  {
+
+   margin-left: -6px;
+   width: 8px;
+
+  }
+}
+
+.article-img
+{
+  height: 200px;
+  width:230px;
+  border: 6px solid gray;
+  margin-left: -70px;
+  margin-top: -80px;
+  border-radius: 40px;
+  
+}
+@media screen and (max-width: 500px) {
+  .article-img  {
+
+   width: 150px;
+  }
+}
+
+.article
+{
+  list-style-type: none;
+  color:white;
+ display: grid;
+}
+     
+@media screen and (max-width: 500px) {
+  .article {
+
+   margin-left: -30px;
+  }
+}
+
+
+
+
+
+.article-author
+{
+  color:blue;
+ 
+
+}
+.article-description
+{
+  margin-left: -50px;
+}
+h2{
+  margin-left: -50px;
+  font-weight: 200px;
+  font-size: 20px;
+  
+}
+.article-link
+{
+  text-decoration: none;
+  margin-left: 90px;
+  margin-top: 50px;
+}
+
+
+
+/* hovering effect on the news item card */
+
+
+#news-articles:hover,
+#news-articles:focus,
+#news-articles:active {
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+}
+
+  /* loader */
+
+  #loading {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 120px;
+    height:120px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+     animation: spin 2s linear infinite;
+  }
+  
+  /* Safari */
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  } 
+
+
+
+
+/* Enable Mode switch */
+.dark-mode {
+  background-color: rgb(110, 104, 104);
+  color: white;
+
+}
+button{
+  float: right;
+  padding: 10px;
+  border-radius: 40px;
+  background-color: rgb(16, 16, 44);
+  color:white;
+
+}
+
+@media screen and (max-width: 500px) {
+  button  {
+ margin:15px 15px;
+  }
+}
+
+
+        
+    </style>
+    
      <title>Document</title>
 </head>
 
@@ -12,15 +217,76 @@
 <body onload="myLoader">
     <div class="header">
         
-        <h3>NEWS AGGREATOR</h3>
+        <h3>NEWS AGGREGATOR</h3>
        
     </div>
     <button onclick ="myFunction()">Enable Dark mode</button>
     <input type="text" id ="search" placeholder="Type and press enter to search" onkeyup="mySearch()" >
      <div id="app">
        <div id="loading"></div>
-            
+    
+       
+     <!-- Fetch the latest news -->
+       <script>
+           function fetchlatestnews(){
+  fetch("http://newsapi.org/v2/top-headlines?country=us&apiKey=557b993c41734ec19746057e5f21d17c")
 
+  .then(responce =>{
+    if(!responce.ok){
+      throw Error ('ERROR');
+    }
+           return responce.json();
+    
+    })
+
+.then(articles => {
+ console.log(articles.articles);
+ const html = articles.articles
+ .map(article => {
+    return `
+   
+        <ul id="news-article"> 
+             <li class="article"> 
+                <img class="article-img" src=${article.urlToImage} alt="article-img"></img>
+                    <h2 class="article.title">${article.title}</h2>
+                        <p class="article-description">${article.description}</p>
+                           <span class="article-author">${article.author}</span>
+                               <a class="article-link" href=${article.url}>See more</a>
+  
+              </li>
+
+          </ul>  `;
+         
+     
+  })
+    
+    .join("");
+    console.log(html);
+    document.querySelector("#app").insertAdjacentHTML("afterbegin",html);
+ 
+  })
+  .catch(error =>{
+    console.log(error);
+  });
+ 
+}
+
+
+// <--Enable Togle Button-->
+function myFunction() {
+  var element = document.body;
+  element.classList.toggle("dark-mode");
+}
+// <---loader---> //
+
+var preloader = document.getElementById('loading');
+ function myLoader(){
+   preloader.style.display ='none';
+ }
+ 
+fetchlatestnews ();
+
+       </script>
 
     </body>
 
